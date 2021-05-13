@@ -1,5 +1,5 @@
 import React from 'react';
-import {MdCheckBoxOutlineBlank, MdCheckBox, MdRemoveCircleOutline} from 'react-icons/md';
+import { MdCheckBoxOutlineBlank, MdCheckBox, MdRemoveCircleOutline } from 'react-icons/md';
 import styled from 'styled-components';
 
 const ListItem = styled.div`
@@ -40,15 +40,23 @@ const Remove = styled.div`
     }
 `
 
-const TodoListItem = () => {
-    return(
+const TodoListItem = ({ todo, onRemove, onToggle }) => {
+    const { id, text, checked } = todo;
+    return (
         <ListItem>
-            <CheckBox>
-                <MdCheckBoxOutlineBlank/>
-                <Text>일정</Text>
-            </CheckBox>
-            <Remove>
-                <MdRemoveCircleOutline/>
+            {checked ?
+                <CheckBox onClick={() => onToggle(id)}>
+                    <MdCheckBox />
+                    <Text style={{ textDecoration: 'line-through', color: "#dee2e6" }}>{text}</Text>
+                </CheckBox>
+                :
+                <CheckBox onClick={() => onToggle(id)}>
+                    <MdCheckBoxOutlineBlank />
+                    <Text>{text}</Text>
+                </CheckBox>
+            }
+            <Remove onClick={() => onRemove(id)}>
+                <MdRemoveCircleOutline />
             </Remove>
         </ListItem>
     )

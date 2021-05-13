@@ -1,5 +1,5 @@
-import React from 'react';
-import {MdAdd} from 'react-icons/md';
+import React, { useState, useCallback } from 'react';
+import { MdAdd } from 'react-icons/md';
 import styled from 'styled-components';
 
 const Insert = styled.form`
@@ -37,12 +37,26 @@ const Button = styled.button`
     }
 `
 
-const TodoInsert = () => {
-    return(
-        <Insert>
-            <Input placeholder = "할 일을 입력하세요"/>
-            <Button type = "submit">
-                <MdAdd/>
+const TodoInsert = ({ onInsert }) => {
+    const [value, setValue] = useState('');
+
+    // useCallback : 렌더링될 때마다 함수를 새로 만들지 않기 때문에 효율적이다.
+    const onInputChange = useCallback((e) => {
+        setValue(e.target.value);
+        console.log(value);
+    }, []);
+
+    const onSubmit = useCallback((e) => {
+        onInsert(value);
+        setValue('');
+        e.preventDefault(); // onSubmit은 새로고침 유발 -> e.preventDefault()로 새로고침 막음
+    }, [onInsert, value]);
+
+    return (
+        <Insert onSubmit={onSubmit}>
+            <Input placeholder="할 일을 입력하세요" value={value} onChange={onInputChange} />
+            <Button type="submit">
+                <MdAdd />
             </Button>
         </Insert>
     )
